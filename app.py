@@ -68,9 +68,6 @@ def cariproduk(nama_produk):
         return print (err)
 
 
-cariproduk ("marjan")
-
-
 
 # Post Request
 @app.route("/callback", methods=['POST'])
