@@ -68,7 +68,6 @@ def cariproduk(nama_produk):
         return print (err)
 
 
-
 # Post Request
 @app.route("/callback", methods=['POST'])
 def callback():
@@ -89,10 +88,10 @@ def handle_message(event):
     profile = line_bot_api.get_profile(sender)
 
     data=text.split('-')
-    if(data[0]=='find'):
+    if(data[0]=='lihat'):
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text=cariproduk(data[1])))
     else:
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text = "Keyword salah, untuk mencari produk tuliskan find-(nama produk) "))
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text = "Coba pakai keyword yang bener deh, find-(nama produk)"))
 
 import os
 if __name__ == "__main__":
