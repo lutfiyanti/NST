@@ -36,9 +36,9 @@ from linebot.models import (
 app = Flask(__name__)
 
 # Channel Access Token
-line_bot_api = LineBotApi('fZklMpUf7UueAqA1DtHj3V8+Udz9toJ1AEf/7iqchW3od8eoDfdi0/0UV5t/PqSfnHtVQZLtie3eOu6JgKKfpbUr40rMWj1RfmdyxNSIOGJm6Ppd7wZGGl0zfWKONWEBlifqBPiZcjoDWWai+MdnwAdB04t89/1O/w1cDnyilFU=')
+line_bot_api = LineBotApi('N+2Dyafq9MU7670K9Tu6TPdxzdTmCI6DW2zk/2GFHEpqzU76krjB8FqSdsOQPxsK8yk/W5LZMtgMKSNMuzCU7PtY2oj/2lYCl2+5J/IXtXRmXAeYt5TndqaDm7fFYOmeb4QmeHGd6q1A7txOpP7ZoAdB04t89/1O/w1cDnyilFU=')
 # Channel Secret
-handler = WebhookHandler('8d34f33a911c087bfa231108a614b282')
+handler = WebhookHandler('acd0a3afda7cfff11db1ef4a0c81e498')
 #===========[ NOTE SAVER ]=======================
 notes = {}
 
@@ -88,7 +88,7 @@ def handle_message(event):
     profile = line_bot_api.get_profile(sender)
 
     data=text.split('-')
-    if(data[0]=='lihat'):
+    if(produk[0]=='lihat'):
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text=cariproduk(data[1])))
     else:
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text = "Coba pakai keyword yang bener deh, find-(nama produk)"))
