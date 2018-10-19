@@ -16,6 +16,7 @@ import sys, random
 import tempfile
 import requests
 import re
+import requests, json
 
 from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage,
@@ -41,24 +42,31 @@ handler = WebhookHandler('8d34f33a911c087bfa231108a614b282')
 #===========[ NOTE SAVER ]=======================
 notes = {}
 
-#REQUEST DATA MHS
-def carimhs(input):
-    URLmhs = 
-"https://www.aditmasih.tk/api_yemima/show.php?nrp=" + 
-input
-    irham = requests.get(URLmhs)
-    data = irham.json()
+#input mencari
+def cariproduk(nama_produk):
+    URLproduk = "http://api.agusadiyanto.net/halal/?menu=nama_produk&query=" + nama_produk
+    r = requests.get(URLproduk)
+    produk = r.json()
     err = "data tidak ditemukan"
     
-    flag = data['flag']
-    if(flag == "1"):
-        nrp = data['data_admin'][0]['nrp']
-        nama = data['data_admin'][0]['nama']
-        kos = data['data_admin'][0]['alamat']
+    status = produk['status']
+    if(status == "success"):
+        nama_produk = produk['data'][0]['nama_produk']
+        nomor_sertifikat = produk['data'][0]['nomor_sertifikat']
+        nama_produsen = produk['data'][0]['nama_produsen']
+        berlaku_hingga = produk['data'][0]['berlaku_hingga']
+        tes = produk['data'][0]['tes']
+        
 
-        return nama + '\n' + nrp + '\n' + kos
-    elif(flag == "0"):
-        return err    
+        # munculin semua, ga rapi, ada 'u' nya
+        # all_data = data['teman'][0]
+        produk= "Nama Produk : "+nama_produk+"\nNomor Sertifikat : "+nomor_sertifikat+"\nNama Produsen : "+nama_produsen+"\nBerlaku Hingga : "+berlaku_hingga+"\nTes : "+tes
+        return (produk)
+        # return all_data
+
+    elif(status == "error"):
+        return (err)
+
 
 # Post Request
 @app.route("/callback", methods=['POST'])
@@ -74,12 +82,17 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    text = event.message.text #simplify for receove message
+    text = event.message.text #simplify for receive message
     sender = event.source.user_id #get usesenderr_id
     gid = event.source.sender_id #get group_id
     profile = line_bot_api.get_profile(sender)
-    line_bot_api.reply_message(event.reply_token,TextSendMessage(text=carimhs(text)))
-    #line_bot_api.reply_message(event.reply_token,TextSendMessage(text="masuk"))
+
+    produk=text.split('-')
+    if(produk[0]=='lihat'):
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text=cariproduk(produk[1])))
+    else:
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text = "Coba pakai keyword yang bener deh, find-(nama produk)"))
+
 import os
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
